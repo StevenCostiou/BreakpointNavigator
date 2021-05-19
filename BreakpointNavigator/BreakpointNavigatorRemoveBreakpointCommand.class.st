@@ -3,13 +3,13 @@ I extend the `StRemoveBreakpointCommand` by just adding a refresh of the breakpo
 Should I be merged later into `StRemoveBreakpointCommand`?
 "
 Class {
-	#name : #BreakpointBrowserRemoveBreakpointCommand,
+	#name : #BreakpointNavigatorRemoveBreakpointCommand,
 	#superclass : #StRemoveBreakpointCommand,
 	#category : #BreakpointNavigator
 }
 
 { #category : #execution }
-BreakpointBrowserRemoveBreakpointCommand >> execute [
+BreakpointNavigatorRemoveBreakpointCommand >> execute [
 
 	super execute.
 	self context resetAll

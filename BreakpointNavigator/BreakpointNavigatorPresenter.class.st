@@ -3,7 +3,7 @@ I browse halts and breakpoints of the system.
 I add and fix problems of `StDebuggerBreakpointInspection`, and I should later be merged with it.
 "
 Class {
-	#name : #BreakpointBrowserPresenter,
+	#name : #BreakpointNavigatorPresenter,
 	#superclass : #StDebuggerBreakpointInspection,
 	#instVars : [
 		'breakpointedMethods',
@@ -16,7 +16,7 @@ Class {
 }
 
 { #category : #extensions }
-BreakpointBrowserPresenter class >> breakpointCommandsWith: presenter forRootGroup: aCmCommandsGroup [
+BreakpointNavigatorPresenter class >> breakpointCommandsWith: presenter forRootGroup: aCmCommandsGroup [
 	<extensionCommands>
 	
 	aCmCommandsGroup
@@ -25,7 +25,7 @@ BreakpointBrowserPresenter class >> breakpointCommandsWith: presenter forRootGro
 ]
 
 { #category : #specs }
-BreakpointBrowserPresenter class >> defaultSpec [
+BreakpointNavigatorPresenter class >> defaultSpec [
 
 	^ SpPanedLayout newVertical
 		  add: (SpPanedLayout newHorizontal
@@ -59,7 +59,7 @@ BreakpointBrowserPresenter class >> defaultSpec [
 ]
 
 { #category : #'world menu' }
-BreakpointBrowserPresenter class >> menuCommandOn: aBuilder [
+BreakpointNavigatorPresenter class >> menuCommandOn: aBuilder [
 
 	<worldMenu>
 	(aBuilder item: #'Breakpoint Navigator')
@@ -72,9 +72,9 @@ BreakpointBrowserPresenter class >> menuCommandOn: aBuilder [
 ]
 
 { #category : #extensions }
-BreakpointBrowserPresenter class >> removeBreakpointCommandFor: presenter [
+BreakpointNavigatorPresenter class >> removeBreakpointCommandFor: presenter [
 	| cmd |
-	cmd := BreakpointBrowserRemoveBreakpointCommand forSpecContext: presenter.
+	cmd := BreakpointNavigatorRemoveBreakpointCommand forSpecContext: presenter.
 	cmd iconName: #smallDelete.
 	cmd innerCommand
 		transform: [ :ctx | ctx methodsWithBreakpoints selection selectedItem ].
@@ -82,19 +82,19 @@ BreakpointBrowserPresenter class >> removeBreakpointCommandFor: presenter [
 ]
 
 { #category : #private }
-BreakpointBrowserPresenter >> breakpointsForModel [
+BreakpointNavigatorPresenter >> breakpointsForModel [
 
 	^ Breakpoint all
 ]
 
 { #category : #presenters }
-BreakpointBrowserPresenter >> buildTableData [
+BreakpointNavigatorPresenter >> buildTableData [
 	self resetAll.
 	super buildTableData 
 ]
 
 { #category : #presenters }
-BreakpointBrowserPresenter >> configureSourceCodeUpdate [
+BreakpointNavigatorPresenter >> configureSourceCodeUpdate [
 
 	methodsWithBreakpoints whenSelectionChangedDo: [ :selection | 
 		selection isEmpty ifFalse: [ 
@@ -134,14 +134,14 @@ BreakpointBrowserPresenter >> configureSourceCodeUpdate [
 ]
 
 { #category : #initialization }
-BreakpointBrowserPresenter >> initializeBreakpointedMethodsList [
+BreakpointNavigatorPresenter >> initializeBreakpointedMethodsList [
 
 	breakpointedMethods := self newList.
 	breakpointedMethods display: [ :compiledMethod | compiledMethod name ]
 ]
 
 { #category : #initialization }
-BreakpointBrowserPresenter >> initializeHeaders [
+BreakpointNavigatorPresenter >> initializeHeaders [
 
 	breakpointsHeader := self instantiate: StHeaderBar.
 	breakpointsHeader label: 'Breakpoints'.
@@ -152,7 +152,7 @@ BreakpointBrowserPresenter >> initializeHeaders [
 ]
 
 { #category : #initialization }
-BreakpointBrowserPresenter >> initializePresenters [ 
+BreakpointNavigatorPresenter >> initializePresenters [ 
 	self initializeHeaders.
 	self buildSourceCode.
 	self buildHaltAndBreakpointTable.
@@ -166,7 +166,7 @@ BreakpointBrowserPresenter >> initializePresenters [
 ]
 
 { #category : #updating }
-BreakpointBrowserPresenter >> initializeWindow: aWindowPresenter [
+BreakpointNavigatorPresenter >> initializeWindow: aWindowPresenter [
 	
 	aWindowPresenter
 		title: 'Breakpoint Navigator';		
@@ -175,7 +175,7 @@ BreakpointBrowserPresenter >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : #presenters }
-BreakpointBrowserPresenter >> resetAll [
+BreakpointNavigatorPresenter >> resetAll [
 
 	breakpointedMethods items: OrderedCollection new.
 	breakpointsInSourceCode text: ''.
@@ -183,7 +183,7 @@ BreakpointBrowserPresenter >> resetAll [
 ]
 
 { #category : #updating }
-BreakpointBrowserPresenter >> updateBreakpointRemoved: aBreakpointAnnouncement [
+BreakpointNavigatorPresenter >> updateBreakpointRemoved: aBreakpointAnnouncement [
 
 	| bpItem |
 	bpItem := self methodsWithBreakpoints items
@@ -196,14 +196,14 @@ BreakpointBrowserPresenter >> updateBreakpointRemoved: aBreakpointAnnouncement [
 ]
 
 { #category : #updating }
-BreakpointBrowserPresenter >> updateSourceCodeForHaltItem: aStHaltInspectionItem [
+BreakpointNavigatorPresenter >> updateSourceCodeForHaltItem: aStHaltInspectionItem [
 
 	breakpointsInSourceCode beForBehavior:
 		aStHaltInspectionItem breakpoint node methodNode method methodClass
 ]
 
 { #category : #updating }
-BreakpointBrowserPresenter >> updateSourceCodeForVariableBreakpointItem: aStBreakpointInspectionItem [
+BreakpointNavigatorPresenter >> updateSourceCodeForVariableBreakpointItem: aStBreakpointInspectionItem [
 
 	breakpointsInSourceCode beForBehavior:
 		aStBreakpointInspectionItem breakpoint targetClassOrMethod
