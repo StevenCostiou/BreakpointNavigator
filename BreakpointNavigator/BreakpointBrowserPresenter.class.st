@@ -134,7 +134,8 @@ BreakpointBrowserPresenter >> initializeWindow: aWindowPresenter [
 	
 	aWindowPresenter
 		title: 'Breakpoint Navigator';		
-		windowIcon: (self application iconNamed: #glamorousBug)
+		windowIcon: (self application iconNamed: #glamorousBug);
+		initialExtent: 800@400
 ]
 
 { #category : #presenters }
