@@ -7,7 +7,10 @@ Class {
 	#superclass : #StDebuggerBreakpointInspection,
 	#instVars : [
 		'breakpointedMethods',
-		'methodsToNodesMap'
+		'methodsToNodesMap',
+		'breakpointsHeader',
+		'methodsHeader',
+		'codeHeader'
 	],
 	#category : #BreakpointNavigator
 }
@@ -27,10 +30,31 @@ BreakpointBrowserPresenter class >> defaultSpec [
 	^ SpPanedLayout newVertical
 		  add: (SpPanedLayout newHorizontal
 				   positionOfSlider: 60 percent;
-				   add: #methodsWithBreakpoints;
-				   add: #breakpointedMethods;
+				   add: (SpBoxLayout newVertical
+						    add: #breakpointsHeader withConstraints: [ :constraints | 
+							    constraints
+								    fill: false;
+								    expand: false;
+								    height: self toolbarHeight ];
+						    add: #methodsWithBreakpoints;
+						    yourself);
+				   add: (SpBoxLayout newVertical
+						    add: #methodsHeader withConstraints: [ :constraints | 
+							    constraints
+								    fill: false;
+								    expand: false;
+								    height: self toolbarHeight ];
+						    add: #breakpointedMethods;
+						    yourself);
 				   yourself);
-		  add: #breakpointsInSourceCode;
+		  add: (SpBoxLayout newVertical
+				   add: #codeHeader withConstraints: [ :constraints | 
+					   constraints
+						   fill: false;
+						   expand: false;
+						   height: self toolbarHeight ];
+				   add: #breakpointsInSourceCode;
+				   yourself);
 		  yourself
 ]
 
@@ -117,7 +141,19 @@ BreakpointBrowserPresenter >> initializeBreakpointedMethodsList [
 ]
 
 { #category : #initialization }
+BreakpointBrowserPresenter >> initializeHeaders [
+
+	breakpointsHeader := self instantiate: StHeaderBar.
+	breakpointsHeader label: 'Breakpoints'.
+	methodsHeader := self instantiate: StHeaderBar.
+	methodsHeader label: 'Affected methods'.
+	codeHeader := self instantiate: StHeaderBar.
+	codeHeader label: 'Breakpoint locations in the source code'.
+]
+
+{ #category : #initialization }
 BreakpointBrowserPresenter >> initializePresenters [ 
+	self initializeHeaders.
 	self buildSourceCode.
 	self buildHaltAndBreakpointTable.
 	self initializeBreakpointedMethodsList.	
